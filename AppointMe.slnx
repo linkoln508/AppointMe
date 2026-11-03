@@ -1,0 +1,5 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/AppointMe.Api/AppointMe.Api.csproj" />
+  </Folder>
+</Solution>
