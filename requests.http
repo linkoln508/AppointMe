@@ -1,0 +1,4 @@
+@host = https://localhost:7057
+
+### Ping
+GET {{host}}/api/ping
