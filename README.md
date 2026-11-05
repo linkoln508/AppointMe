@@ -22,3 +22,12 @@ To stop the database: `docker compose down`
 
 1. Install the .NET SDK (version 10).
 2. Run the command `dotnet run` in the `src/AppointMe.Api` folder.
+
+### Create the schema
+
+Run all scripts from `db/scripts` in order (from the repository root).
+Use the user and database from your `.env` file:
+
+    Get-Content db\scripts\*.sql | docker exec -i appointme-postgres psql -U appointme -d appointme
+
+Expected output: `CREATE TABLE` three times and `INSERT 0 12`.
