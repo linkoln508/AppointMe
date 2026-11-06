@@ -4,10 +4,10 @@ namespace AppointMe.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class PingController : ControllerBase   // наследуемся от базового класса контроллера
+public class PingController : ControllerBase
 {
-    private readonly IConfiguration _configuration;       // поле для настроек
-    private readonly IWebHostEnvironment _environment;    // поле для окружения
+    private readonly IConfiguration _configuration;
+    private readonly IWebHostEnvironment _environment;
 
     public PingController(IConfiguration configuration, IWebHostEnvironment environment)
     {
@@ -16,12 +16,12 @@ public class PingController : ControllerBase   // наследуемся от б
     }
 
     [HttpGet]
-    public IActionResult Ping()     // IActionResult = "результат действия"
+    public IActionResult Ping()
     {
         var response = new
         {
             status = "ok",
-            environment = _environment.EnvironmentName, //   environment = название окружения.
+            environment = _environment.EnvironmentName,
             serverTime = DateTime.Now,
             appName = _configuration["App:Name"]
         };

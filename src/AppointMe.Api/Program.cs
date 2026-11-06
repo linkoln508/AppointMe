@@ -1,10 +1,17 @@
+using Npgsql;
+using AppointMe.Api.Data;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
 builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+
 builder.Services.AddOpenApi();
+
+var connectionString = builder.Configuration.GetConnectionString("Default");
+
+builder.Services.AddSingleton(NpgsqlDataSource.Create(connectionString!));
+
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 
 var app = builder.Build();
 

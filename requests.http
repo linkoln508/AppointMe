@@ -2,3 +2,24 @@
 
 ### Ping
 GET {{host}}/api/ping
+
+### Get all categories
+GET {{host}}/api/categories
+
+### Get category by id
+GET {{host}}/api/categories/1
+
+### Create category
+POST {{host}}/api/categories
+Content-Type: application/json
+
+{ "name": "Spa", "slug": "spa" }
+
+### Update category
+PUT {{host}}/api/categories/1
+Content-Type: application/json
+
+{ "name": "Barber", "slug": "barber" }
+
+### Delete category
+DELETE {{host}}/api/categories/999
