@@ -16,6 +16,8 @@ builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 
 builder.Services.AddScoped<IBusinessRepository, BusinessRepository>();
 
+builder.Services.AddScoped<IServiceRepository, ServiceRepository>();
+
 // Dapper: столбец category_id из базы = свойство CategoryId в C#.
 Dapper.DefaultTypeMap.MatchNamesWithUnderscores = true;
 
