@@ -12,8 +12,10 @@ namespace AppointMe.Api.Data
         {
             _dataSource = dataSource;
         }
+
         public async Task<IEnumerable<Category>> GetAllAsync()
         {
+            // "await using" вернёт подключение в пул в конце метода.
             await using var connection = await _dataSource.OpenConnectionAsync();
 
             const string sql = "SELECT id, name, slug FROM categories ORDER BY name";
@@ -38,16 +40,19 @@ namespace AppointMe.Api.Data
 
             return await connection.ExecuteScalarAsync<int>(sql, category);
         }
+
         public async Task<bool> UpdateAsync(Category category)
         {
             await using var connection = await _dataSource.OpenConnectionAsync();
 
             const string sql = "UPDATE categories SET name = @Name, slug = @Slug WHERE id = @Id";
 
+            // Сколько строк затронуто
             var rows = await connection.ExecuteAsync(sql, category);
 
             return rows > 0;
         }
+
         public async Task<bool> DeleteAsync(int id)
         {
             await using var connection = await _dataSource.OpenConnectionAsync();

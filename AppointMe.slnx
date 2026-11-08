@@ -1,4 +1,7 @@
 <Solution>
+  <Folder Name="/Solution Items/">
+    <File Path="requests.http" />
+  </Folder>
   <Folder Name="/src/">
     <Project Path="src/AppointMe.Api/AppointMe.Api.csproj" />
   </Folder>

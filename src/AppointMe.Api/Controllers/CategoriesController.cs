@@ -43,17 +43,19 @@ namespace AppointMe.Api.Controllers
                 var newId = await _repository.CreateAsync(category);
                 category.Id = newId;
 
+                // 201 + заголовок Location с адресом новой категории.
                 return CreatedAtAction(nameof(GetById), new { id = newId }, category);
             }
             catch (PostgresException ex) when (ex.SqlState == PostgresErrorCodes.UniqueViolation)
             {
-                return Conflict($"Category with slug '{category.Slug}' alredy exists.");
+                return Conflict($"Category with slug '{category.Slug}' already exists.");
             }
         }
 
         [HttpPut("{id:int}")]
         public async Task<IActionResult> Update(int id, Category category)
         {
+            // id из адреса главнее, чем id в теле запроса
             category.Id = id;
 
             var updated = await _repository.UpdateAsync(category);
@@ -70,6 +72,7 @@ namespace AppointMe.Api.Controllers
 
                 return deleted ? NoContent() : NotFound();
             }
+            // На категорию ещё ссылаются салоны.
             catch (PostgresException ex) when (ex.SqlState == PostgresErrorCodes.ForeignKeyViolation)
             {
                 return Conflict("Category is used by businesses and cannot be deleted.");

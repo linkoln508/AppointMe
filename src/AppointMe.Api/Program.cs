@@ -3,19 +3,24 @@ using AppointMe.Api.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// ===== (DI) =====
 builder.Services.AddControllers();
-
 builder.Services.AddOpenApi();
 
+// Подключение в User Secrets
 var connectionString = builder.Configuration.GetConnectionString("Default");
 
 builder.Services.AddSingleton(NpgsqlDataSource.Create(connectionString!));
 
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 
+builder.Services.AddScoped<IBusinessRepository, BusinessRepository>();
+
+// Dapper: столбец category_id из базы = свойство CategoryId в C#.
+Dapper.DefaultTypeMap.MatchNamesWithUnderscores = true;
+
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();

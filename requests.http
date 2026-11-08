@@ -23,3 +23,12 @@ Content-Type: application/json
 
 ### Delete category
 DELETE {{host}}/api/categories/999
+
+### Get all businesses
+GET {{host}}/api/businesses
+
+### Create business
+POST {{host}}/api/businesses
+Content-Type: application/json
+
+{ "categoryId": 1, "name": "Classic Barber", "city": "Kharkiv", "address": "Sumska 10" }
