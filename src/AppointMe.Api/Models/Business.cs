@@ -11,6 +11,8 @@ namespace AppointMe.Api.Models
         // Заполняется только при чтении (через JOIN), клиент его не присылает.
         public string? CategoryName { get; set; }
 
+        public List<Service> Services { get; set; } = new List<Service>();
+
         [Required]
         [StringLength(200, MinimumLength = 2)]
         public string Name { get; set; } = string.Empty;

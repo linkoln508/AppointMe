@@ -1,6 +1,7 @@
 ﻿using AppointMe.Api.Models;
 using Dapper;
 using Npgsql;
+using System.Dynamic;
 
 namespace AppointMe.Api.Data
 {
@@ -71,6 +72,30 @@ namespace AppointMe.Api.Data
             var rows = await connection.ExecuteAsync(sql, new { Id = id });
 
             return rows > 0;
+        }
+
+        public async Task<Business?> GetByIdWithServicesAsync(Guid id)
+        {
+            await using var connection = await _dataSource.OpenConnectionAsync();
+
+            const string sql = @"
+                                SELECT b.id, b.category_id, c.name AS category_name, b.name, b.description, b.city, b.address, b.created_at
+                                FROM businesses b JOIN categories c ON b.category_id = c.id WHERE b.id = @Id;
+                                SELECT id, business_id, name, description, price, duration_minutes
+                                FROM services WHERE business_id = @Id ORDER BY name";
+            using var multi = await connection.QueryMultipleAsync(sql, new { Id = id });
+
+            var business = await multi.ReadSingleOrDefaultAsync<Business>();
+            var services = await multi.ReadAsync<Service>();
+
+            if (business == null)
+            {
+                return null;
+            }
+
+            business.Services = services.ToList();
+
+            return business;
         }
     }
 }

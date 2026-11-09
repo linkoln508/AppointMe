@@ -8,7 +8,6 @@ namespace AppointMe.Api.Data
 
         Task<Category?> GetByIdAsync(int id);
 
-        // Новый id
         Task<int> CreateAsync(Category category);
 
         Task<bool> UpdateAsync(Category category);

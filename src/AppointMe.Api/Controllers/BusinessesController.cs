@@ -28,7 +28,7 @@ namespace AppointMe.Api.Controllers
         [HttpGet("{id:guid}")]
         public async Task<IActionResult> GetById(Guid id)
         {
-            var business = await _businesses.GetByIdAsync(id);
+            var business = await _businesses.GetByIdWithServicesAsync(id);
             return business == null ? NotFound() : Ok(business);
         }
 

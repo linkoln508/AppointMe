@@ -14,5 +14,7 @@ namespace AppointMe.Api.Data
         Task<bool> UpdateAsync(Business business);
 
         Task<bool> DeleteAsync(Guid id);
+
+        Task<Business?> GetByIdWithServicesAsync(Guid id);
     }
 }

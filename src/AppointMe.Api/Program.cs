@@ -7,7 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
-// Подключение в User Secrets
+// Подключение к базе (лежит в User Secrets)
 var connectionString = builder.Configuration.GetConnectionString("Default");
 
 builder.Services.AddSingleton(NpgsqlDataSource.Create(connectionString!));
