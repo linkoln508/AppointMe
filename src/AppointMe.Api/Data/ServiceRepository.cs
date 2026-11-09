@@ -18,7 +18,7 @@ namespace AppointMe.Api.Data
             await using var connection = await _dataSource.OpenConnectionAsync();
 
             const string sql = @"
-                SELECT id, business_id, name, description, price, duration_minutes
+                SELECT id, business_id, name, description, price, duration_minutes, is_active
                 FROM services
                 WHERE business_id = @BusinessId
                 ORDER BY name";
@@ -31,7 +31,7 @@ namespace AppointMe.Api.Data
             await using var connection = await _dataSource.OpenConnectionAsync();
 
             const string sql = @"
-                SELECT id, business_id, name, description, price, duration_minutes
+                SELECT id, business_id, name, description, price, duration_minutes, is_active
                 FROM services
                 WHERE id = @ServiceId AND business_id = @BusinessId";
 
@@ -44,8 +44,8 @@ namespace AppointMe.Api.Data
             await using var connection = await _dataSource.OpenConnectionAsync();
 
             const string sql = @"
-                INSERT INTO services (business_id, name, description, price, duration_minutes)
-                VALUES (@BusinessId, @Name, @Description, @Price, @DurationMinutes)
+                INSERT INTO services (business_id, name, description, price, duration_minutes, is_active)
+                VALUES (@BusinessId, @Name, @Description, @Price, @DurationMinutes, @Is_active)
                 RETURNING id";
 
             return await connection.ExecuteScalarAsync<Guid>(sql, service);
@@ -58,8 +58,7 @@ namespace AppointMe.Api.Data
             // в WHERE: нельзя изменить чужую услугу.
             const string sql = @"
                 UPDATE services
-                SET name = @Name, description = @Description,
-                    price = @Price, duration_minutes = @DurationMinutes
+                SET name = @Name, description = @Description, price = @Price, duration_minutes = @DurationMinutes, is_active = @IsActive
                 WHERE id = @Id AND business_id = @BusinessId";
 
             var rows = await connection.ExecuteAsync(sql, service);

@@ -12,7 +12,6 @@ namespace AppointMe.Api.Models
         [Required]
         [StringLength(200, MinimumLength = 2)]
         public string Name { get; set; } = string.Empty;
-
         public string? Description { get; set; }
 
         [Range(0.01, 10000)]
@@ -20,5 +19,6 @@ namespace AppointMe.Api.Models
 
         [Range(5, 480)]
         public int DurationMinutes { get; set; }
+        public bool IsActive { get; set; } = true;
     }
 }

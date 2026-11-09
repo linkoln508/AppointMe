@@ -28,5 +28,11 @@ namespace AppointMe.Api.Models
         public string Address { get; set; } = string.Empty;
 
         public DateTime CreatedAt { get; set; }
+
+        [MaxLength(30)]
+        [RegularExpression(@"^[0-9 +]*$",
+             ErrorMessage = "Phone can contain only digits, spaces and +.")]
+        public string? Phone { get; set; }
+        public bool IsActive { get; set; } = true;
     }
 }
