@@ -6,7 +6,6 @@ namespace AppointMe.Api.Data
     {
         Task<IEnumerable<Business>> GetAllAsync();
 
-        // null, если не нашли.
         Task<Business?> GetByIdAsync(Guid id);
 
         Task<Guid> CreateAsync(Business business);

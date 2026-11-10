@@ -11,7 +11,6 @@ namespace AppointMe.Api.Controllers
         private readonly IBusinessRepository _businesses;
         private readonly ICategoryRepository _categories;
 
-        // салоны — основная работа, категории - для проверки categoryId
         public BusinessesController(IBusinessRepository businesses, ICategoryRepository categories)
         {
             _businesses = businesses;

@@ -18,7 +18,6 @@ namespace AppointMe.Api.Controllers
             _businesses = businesses;
         }
 
-        // GET /api/businesses/{businessId}/services
         [HttpGet]
         public async Task<IActionResult> GetAll(Guid businessId)
         {
@@ -32,7 +31,6 @@ namespace AppointMe.Api.Controllers
             return Ok(services);
         }
 
-        // GET /api/businesses/{businessId}/services/{serviceId}
         [HttpGet("{serviceId:guid}")]
         public async Task<IActionResult> GetById(Guid businessId, Guid serviceId)
         {
@@ -48,19 +46,16 @@ namespace AppointMe.Api.Controllers
                 return NotFound();
             }
 
-            // [Range] проверяет 5–480, а "кратно 5" проверяем сами.
             if (service.DurationMinutes % 5 != 0)
             {
                 return BadRequest("Duration must be a multiple of 5 minutes.");
             }
 
-            // Салон берём из адреса, а не из тела.
             service.BusinessId = businessId;
 
             var newId = await _services.CreateAsync(service);
             var created = await _services.GetByIdAsync(businessId, newId);
 
-            // Два параметра для адреса новой услуги: и салон, и услуга.
             return CreatedAtAction(nameof(GetById), new { businessId, serviceId = newId }, created);
         }
 

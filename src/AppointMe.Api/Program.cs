@@ -1,5 +1,6 @@
 using Npgsql;
 using AppointMe.Api.Data;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,17 +10,15 @@ builder.Services.AddOpenApi();
 
 // Подключение к базе (лежит в User Secrets)
 var connectionString = builder.Configuration.GetConnectionString("Default");
+builder.Services.AddDbContext<AppointMeDbContext>(options =>
+    options.UseNpgsql(connectionString)          // PostgreSQL, подключения из User Secrets
+           .UseSnakeCaseNamingConvention());
 
-builder.Services.AddSingleton(NpgsqlDataSource.Create(connectionString!));
+builder.Services.AddScoped<ICategoryRepository, EfCategoryRepository>();
 
-builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<IBusinessRepository, EfBusinessRepository>();
 
-builder.Services.AddScoped<IBusinessRepository, BusinessRepository>();
-
-builder.Services.AddScoped<IServiceRepository, ServiceRepository>();
-
-// Dapper: столбец category_id из базы = свойство CategoryId в C#.
-Dapper.DefaultTypeMap.MatchNamesWithUnderscores = true;
+builder.Services.AddScoped<IServiceRepository, EfServiceRepository>();
 
 var app = builder.Build();
 

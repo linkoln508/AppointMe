@@ -43,7 +43,7 @@ namespace AppointMe.Api.Controllers
                 var newId = await _repository.CreateAsync(category);
                 category.Id = newId;
 
-                // 201 + заголовок Location с адресом новой категории.
+                // 201
                 return CreatedAtAction(nameof(GetById), new { id = newId }, category);
             }
             catch (PostgresException ex) when (ex.SqlState == PostgresErrorCodes.UniqueViolation)
@@ -72,7 +72,6 @@ namespace AppointMe.Api.Controllers
 
                 return deleted ? NoContent() : NotFound();
             }
-            // На категорию ещё ссылаются салоны.
             catch (PostgresException ex) when (ex.SqlState == PostgresErrorCodes.ForeignKeyViolation)
             {
                 return Conflict("Category is used by businesses and cannot be deleted.");
