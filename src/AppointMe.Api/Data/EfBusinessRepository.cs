@@ -49,21 +49,29 @@ public class EfBusinessRepository : IBusinessRepository
             .FirstOrDefaultAsync(b => b.Id == id);
     }
 
+    // ── метод GetByIdWithServicesAsync (репозиторий бизнесов) ──
     public async Task<Business?> GetByIdWithServicesAsync(Guid id)
     {
-        var business = await GetByIdAsync(id);
-        if (business == null)
-        {
-            return null;
-        }
-
-        business.Services = await _db.Services
+        return await _db.Businesses
             .AsNoTracking()
-            .Where(s => s.BusinessId == id && s.IsActive)
-            .OrderBy(s => s.Name)
-            .ToListAsync();
-
-        return business;
+            .Join(_db.Categories,
+                b => b.CategoryId,
+                c => c.Id,
+                (b, c) => new Business
+                {
+                    Id = b.Id,
+                    CategoryId = b.CategoryId,
+                    CategoryName = c.Name,
+                    Name = b.Name,
+                    Description = b.Description,
+                    City = b.City,
+                    Address = b.Address,
+                    Phone = b.Phone,
+                    IsActive = b.IsActive,
+                    CreatedAt = b.CreatedAt,
+                    Services = b.Services.Where(s => s.IsActive).OrderBy(s => s.Name).ToList()
+                })
+            .FirstOrDefaultAsync(b => b.Id == id);
     }
 
     public async Task<Guid> CreateAsync(Business business)
