@@ -6,6 +6,8 @@ namespace AppointMe.Api.Models
     {
         public Guid Id { get; set; }
 
+        public Guid? OwnerId { get; set; }
+
         public int CategoryId { get; set; }
 
         // Заполняется только при чтении (через JOIN), клиент его не присылает.

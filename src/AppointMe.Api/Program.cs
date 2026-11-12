@@ -1,10 +1,11 @@
 using AppointMe.Api.Data;
 using AppointMe.Api.Middleware;
+using AppointMe.Api.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// ===== (DI) =====
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
@@ -13,6 +14,19 @@ var connectionString = builder.Configuration.GetConnectionString("Default");
 builder.Services.AddDbContext<AppointMeDbContext>(options =>
     options.UseNpgsql(connectionString)          // PostgreSQL, подключения из User Secrets
            .UseSnakeCaseNamingConvention());
+
+// Identity: пользователи и роли
+builder.Services.AddIdentityCore<ApplicationUser>(options =>
+{
+    options.Password.RequiredLength = 8;
+    options.Password.RequireDigit = true;
+    options.Password.RequireUppercase = false;
+    options.Password.RequireNonAlphanumeric = false;
+    options.User.RequireUniqueEmail = true;
+    options.Password.RequireLowercase = false;
+})
+    .AddRoles<IdentityRole<Guid>>()                       // включить роли
+    .AddEntityFrameworkStores<AppointMeDbContext>();      // хранить юзеров/роли через DbContext
 
 builder.Services.AddScoped<ICategoryRepository, EfCategoryRepository>();
 

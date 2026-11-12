@@ -34,3 +34,12 @@ Old SQL scripts are kept in `docs/legacy` for history.
    `dotnet user-secrets set "ConnectionStrings:Default" "Host=localhost;Port=5432;Database=appointme;Username=appointme;Password=YOUR_PASSWORD"`
 3. Run `dotnet run` in the `src/AppointMe.Api` folder.
 4. Open Swagger: `https://localhost:7057/swagger`
+
+## Password policy
+
+- At least 8 characters
+- At least one digit (0–9)
+- Uppercase, lowercase and special characters are not required
+- Email must be unique
+
+Settings are in `Program.cs` (`AddIdentityCore`).

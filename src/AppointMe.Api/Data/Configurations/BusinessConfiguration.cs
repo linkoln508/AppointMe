@@ -33,6 +33,11 @@ public class BusinessConfiguration : IEntityTypeConfiguration<Business>
             .HasForeignKey(b => b.CategoryId)
             .OnDelete(DeleteBehavior.Restrict);
 
+        builder.HasOne<ApplicationUser>()
+            .WithMany()
+            .HasForeignKey(b => b.OwnerId)
+            .OnDelete(DeleteBehavior.Restrict);
+
         builder.HasMany(b => b.Services)
             .WithOne()
             .HasForeignKey(s => s.BusinessId)
