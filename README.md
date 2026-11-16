@@ -43,3 +43,15 @@ Old SQL scripts are kept in `docs/legacy` for history.
 - Email must be unique
 
 Settings are in `Program.cs` (`AddIdentityCore`).
+
+## Authentication
+
+- `POST /api/auth/register` — create account (`Customer` or `BusinessOwner`)
+- `POST /api/auth/login` — returns JWT (60 minutes)
+- `GET /api/auth/me` — current user from the token (requires `Authorization: Bearer <token>`)
+
+Wrong email or password → `401` with the same message (we do not reveal whether the email exists).
+Blocked user → `403`: the password is correct, but access is forbidden.
+
+JWT key is stored in User Secrets:
+`dotnet user-secrets set "Jwt:Key" "<at least 32 characters>" --project src/AppointMe.Api`

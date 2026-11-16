@@ -370,6 +370,29 @@ namespace AppointMe.Api.Migrations
                         .HasDatabaseName("RoleNameIndex");
 
                     b.ToTable("roles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("8d04dce2-969a-435d-bba4-df3f325983dc"),
+                            ConcurrencyStamp = "8d04dce2-969a-435d-bba4-df3f325983dc",
+                            Name = "Customer",
+                            NormalizedName = "CUSTOMER"
+                        },
+                        new
+                        {
+                            Id = new Guid("b6d1b5f0-3c4e-4a8f-9d2e-6f7a1c2b3d4e"),
+                            ConcurrencyStamp = "b6d1b5f0-3c4e-4a8f-9d2e-6f7a1c2b3d4e",
+                            Name = "BusinessOwner",
+                            NormalizedName = "BUSINESSOWNER"
+                        },
+                        new
+                        {
+                            Id = new Guid("e2a7c9d4-5b1f-4e3a-8c6d-0f9b2a1e7c35"),
+                            ConcurrencyStamp = "e2a7c9d4-5b1f-4e3a-8c6d-0f9b2a1e7c35",
+                            Name = "Admin",
+                            NormalizedName = "ADMIN"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>

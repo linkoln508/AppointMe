@@ -32,3 +32,16 @@ POST {{host}}/api/businesses
 Content-Type: application/json
 
 { "categoryId": 1, "name": "Classic Barber", "city": "Kharkiv", "address": "Sumska 10" }
+
+### Login
+POST {{host}}/api/auth/login
+Content-Type: application/json
+
+{ "email": "dima@test.com", "password": "dima12345" }
+
+### Me (токен из ответа логина)
+GET {{host}}/api/auth/me
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJBcHBvaW50TWUuQ2xpZW50IiwiaXNzIjoiQXBwb2ludE1lIiwiZXhwIjoxNzk0ODM4Njg4LCJzdWIiOiIwMWExZTNlNy0xOTZkLTc4ZTEtYTA3OC0xOTg2MmE5Y2I3M2IiLCJlbWFpbCI6ImRpbWFAdGVzdC5jb20iLCJuYW1lIjoiRGltYSIsInJvbGUiOiJDdXN0b21lciIsImlhdCI6MTc5NDgzNTA4OCwibmJmIjoxNzk0ODM1MDg4fQ.eMASHPCTL8jA2lBwVbrlae5TUliTlv01q2qUNWldi5A
+
+### Me без токена (ждём 401)
+GET {{host}}/api/auth/me
