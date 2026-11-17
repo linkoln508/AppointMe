@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace AppointMe.Api.Controllers;
 
@@ -15,6 +16,7 @@ public class PingController : ControllerBase
         _environment = environment;
     }
 
+    [AllowAnonymous]
     [HttpGet]
     public IActionResult Ping()
     {

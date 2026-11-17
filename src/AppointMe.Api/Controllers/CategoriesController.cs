@@ -1,6 +1,8 @@
 ﻿using AppointMe.Api.Data;
 using AppointMe.Api.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using AppointMe.Api.Auth;
 using Npgsql;
 
 namespace AppointMe.Api.Controllers
@@ -16,6 +18,7 @@ namespace AppointMe.Api.Controllers
             _repository = repository;
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
@@ -23,6 +26,7 @@ namespace AppointMe.Api.Controllers
             return Ok(categories);
         }
 
+        [AllowAnonymous]
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetById(int id)
         {
@@ -35,6 +39,7 @@ namespace AppointMe.Api.Controllers
             return Ok(category);
         }
 
+        [Authorize(Roles = Roles.Admin)]
         [HttpPost]
         public async Task<IActionResult> Create(Category category)
         {
@@ -52,6 +57,7 @@ namespace AppointMe.Api.Controllers
             }
         }
 
+        [Authorize(Roles = Roles.Admin)]
         [HttpPut("{id:int}")]
         public async Task<IActionResult> Update(int id, Category category)
         {
@@ -63,6 +69,7 @@ namespace AppointMe.Api.Controllers
             return updated ? NoContent() : NotFound();
         }
 
+        [Authorize(Roles = Roles.Admin)]
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete(int id)
         {

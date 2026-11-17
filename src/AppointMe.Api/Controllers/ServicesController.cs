@@ -1,5 +1,7 @@
-﻿using AppointMe.Api.Data;
+﻿using AppointMe.Api.Auth;
+using AppointMe.Api.Data;
 using AppointMe.Api.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,6 +20,7 @@ namespace AppointMe.Api.Controllers
             _businesses = businesses;
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> GetAll(Guid businessId)
         {
@@ -30,7 +33,8 @@ namespace AppointMe.Api.Controllers
 
             return Ok(services);
         }
-
+        
+        [AllowAnonymous]
         [HttpGet("{serviceId:guid}")]
         public async Task<IActionResult> GetById(Guid businessId, Guid serviceId)
         {
@@ -38,6 +42,7 @@ namespace AppointMe.Api.Controllers
             return service == null ? NotFound() : Ok(service);
         }
 
+        [Authorize(Roles = Roles.BusinessOwner)]
         [HttpPost]
         public async Task<IActionResult> Create(Guid businessId, Service service)
         {
@@ -59,6 +64,7 @@ namespace AppointMe.Api.Controllers
             return CreatedAtAction(nameof(GetById), new { businessId, serviceId = newId }, created);
         }
 
+        [Authorize(Roles = Roles.BusinessOwner)]
         [HttpPut("{serviceId:guid}")]
         public async Task<IActionResult> Update(Guid businessId, Guid serviceId, Service service)
         {
@@ -74,6 +80,7 @@ namespace AppointMe.Api.Controllers
             return updated ? NoContent() : NotFound();
         }
 
+        [Authorize(Roles = Roles.BusinessOwner)]
         [HttpDelete("{serviceId:guid}")]
         public async Task<IActionResult> Delete(Guid businessId, Guid serviceId)
         {
