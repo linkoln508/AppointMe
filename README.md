@@ -70,3 +70,21 @@ dotnet user-secrets set "Seed:AdminPassword" "<your password>" --project src/App
 ```
 
 Note: a role change takes effect only after the user gets a new token (the role is stored inside the JWT).
+
+### Who can call what
+
+| Endpoint | Who can call it |
+|---|---|
+| `POST /api/auth/register`, `POST /api/auth/login` | Anyone (anonymous) |
+| `GET /api/auth/me` | Any authenticated user |
+| `GET /api/ping` | Anyone (anonymous) |
+| `GET /api/categories`, `GET /api/categories/{id}` | Anyone (anonymous) |
+| `POST/PUT/DELETE /api/categories` | `Admin` |
+| `GET /api/businesses`, `GET /api/businesses/{id}` | Anyone (anonymous) |
+| `POST/PUT/DELETE /api/businesses` | `BusinessOwner` (ownership check comes in W02-T06) |
+| `GET /api/businesses/{id}/services`, `GET .../services/{serviceId}` | Anyone (anonymous) |
+| `POST/PUT/DELETE /api/businesses/{id}/services` | `BusinessOwner` (ownership check comes in W02-T06) |
+
+No token → `401 Unauthorized`. Valid token but wrong role → `403 Forbidden`.
+Everything is protected by default (fallback policy); public endpoints are marked `[AllowAnonymous]`.
+`ownerId` of a new business is taken from the token, not from the request body.

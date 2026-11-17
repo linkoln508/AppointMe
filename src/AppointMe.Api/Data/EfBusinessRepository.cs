@@ -23,6 +23,7 @@ public class EfBusinessRepository : IBusinessRepository
                 (b, c) => new Business
                 {
                     Id = b.Id,
+                    OwnerId = b.OwnerId,
                     CategoryId = b.CategoryId,
                     CategoryName = c.Name,
                     Name = b.Name,
@@ -49,7 +50,7 @@ public class EfBusinessRepository : IBusinessRepository
             .FirstOrDefaultAsync(b => b.Id == id);
     }
 
-    // ── метод GetByIdWithServicesAsync (репозиторий бизнесов) ──
+    // репозиторий бизнесов
     public async Task<Business?> GetByIdWithServicesAsync(Guid id)
     {
         return await _db.Businesses
@@ -60,6 +61,7 @@ public class EfBusinessRepository : IBusinessRepository
                 (b, c) => new Business
                 {
                     Id = b.Id,
+                    OwnerId = b.OwnerId,
                     CategoryId = b.CategoryId,
                     CategoryName = c.Name,
                     Name = b.Name,
