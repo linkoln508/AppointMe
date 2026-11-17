@@ -55,3 +55,18 @@ Blocked user → `403`: the password is correct, but access is forbidden.
 
 JWT key is stored in User Secrets:
 `dotnet user-secrets set "Jwt:Key" "<at least 32 characters>" --project src/AppointMe.Api`
+
+## Roles and admin
+
+Roles: `Customer`, `BusinessOwner`, `Admin`. Their names are constants in `Auth/Roles.cs`; the roles themselves are created by the `SeedRoles` migration. Registration accepts only `Customer` or `BusinessOwner`, nobody can register as `Admin`.
+
+The admin user is created on startup by `AdminSeeder`, if it does not exist yet:
+
+- email: `Seed:AdminEmail` in `appsettings.json`
+- password: `Seed:AdminPassword` in user-secrets (not in git). Minimum 8 characters, at least one digit:
+
+```
+dotnet user-secrets set "Seed:AdminPassword" "<your password>" --project src/AppointMe.Api
+```
+
+Note: a role change takes effect only after the user gets a new token (the role is stored inside the JWT).

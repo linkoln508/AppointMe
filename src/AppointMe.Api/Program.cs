@@ -97,6 +97,11 @@ builder.Services.AddScoped<ITokenService, JwtTokenService>();
 
 var app = builder.Build();
 
+using (var scope = app.Services.CreateScope())
+{
+    await AdminSeeder.SeedAsync(scope.ServiceProvider, app.Configuration);
+}
+
 app.UseMiddleware<RequestTimingMiddleware>();
 
 if (app.Environment.IsDevelopment())

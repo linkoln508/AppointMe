@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using AppointMe.Api.Auth;
+using System.ComponentModel.DataAnnotations;
 
 namespace AppointMe.Api.Models.Auth;
 
@@ -17,7 +18,7 @@ public class RegisterRequest
     public string FullName { get; set; } = string.Empty;
 
     [Required]
-    [RegularExpression("^(Customer|BusinessOwner)$",
+    [RegularExpression($"^({Roles.Customer}|{Roles.BusinessOwner})$",
         ErrorMessage = "AccountType must be Customer or BusinessOwner.")]
     public string AccountType { get; set; } = string.Empty;
 }
