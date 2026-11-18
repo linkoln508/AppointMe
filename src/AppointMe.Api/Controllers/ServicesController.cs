@@ -13,11 +13,13 @@ namespace AppointMe.Api.Controllers
     {
         private readonly IServiceRepository _services;
         private readonly IBusinessRepository _businesses;
+        private readonly IAuthorizationService _authorization;
 
-        public ServicesController(IServiceRepository services, IBusinessRepository businesses)
+        public ServicesController(IServiceRepository services, IBusinessRepository businesses, IAuthorizationService authorization)
         {
             _services = services;
             _businesses = businesses;
+            _authorization = authorization;
         }
 
         [AllowAnonymous]
@@ -42,13 +44,22 @@ namespace AppointMe.Api.Controllers
             return service == null ? NotFound() : Ok(service);
         }
 
-        [Authorize(Roles = Roles.BusinessOwner)]
+        [Authorize(Roles = Roles.BusinessOwnerOrAdmin)]
         [HttpPost]
         public async Task<IActionResult> Create(Guid businessId, Service service)
         {
-            if (await _businesses.GetByIdAsync(businessId) == null)
+            var business = await _businesses.GetByIdAsync(businessId);
+
+            if (business == null)
             {
                 return NotFound();
+            }
+
+            var result = await _authorization.AuthorizeAsync(User, business, "BusinessOwnerOfResource");
+
+            if (!result.Succeeded)
+            {
+                return Forbid();
             }
 
             if (service.DurationMinutes % 5 != 0)
@@ -64,10 +75,24 @@ namespace AppointMe.Api.Controllers
             return CreatedAtAction(nameof(GetById), new { businessId, serviceId = newId }, created);
         }
 
-        [Authorize(Roles = Roles.BusinessOwner)]
+        [Authorize(Roles = Roles.BusinessOwnerOrAdmin)]
         [HttpPut("{serviceId:guid}")]
         public async Task<IActionResult> Update(Guid businessId, Guid serviceId, Service service)
         {
+            var business = await _businesses.GetByIdAsync(businessId);
+
+            if (business == null)
+            {
+                return NotFound();
+            }
+
+            var result = await _authorization.AuthorizeAsync(User, business, "BusinessOwnerOfResource");
+
+            if (!result.Succeeded)
+            {
+                return Forbid();
+            }
+
             if (service.DurationMinutes % 5 != 0)
             {
                 return BadRequest("Duration must be a multiple of 5 minutes.");
@@ -80,10 +105,24 @@ namespace AppointMe.Api.Controllers
             return updated ? NoContent() : NotFound();
         }
 
-        [Authorize(Roles = Roles.BusinessOwner)]
+        [Authorize(Roles = Roles.BusinessOwnerOrAdmin)]
         [HttpDelete("{serviceId:guid}")]
         public async Task<IActionResult> Delete(Guid businessId, Guid serviceId)
         {
+            var business = await _businesses.GetByIdAsync(businessId);
+
+            if (business == null)
+            {
+                return NotFound();
+            }
+
+            var result = await _authorization.AuthorizeAsync(User, business, "BusinessOwnerOfResource");
+
+            if (!result.Succeeded)
+            {
+                return Forbid();
+            }
+
             var deleted = await _services.DeleteAsync(businessId, serviceId);
             return deleted ? NoContent() : NotFound();
         }

@@ -91,13 +91,19 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 builder.Services.AddAuthorizationBuilder()
     .SetFallbackPolicy(new AuthorizationPolicyBuilder()
         .RequireAuthenticatedUser()
-        .Build());
+        .Build())
+    .AddPolicy("BusinessOwnerOfResource", policy =>
+    {
+        policy.Requirements.Add(new BusinessOwnerRequirement());
+    });
 
 builder.Services.AddScoped<ICategoryRepository, EfCategoryRepository>();
 
 builder.Services.AddScoped<IBusinessRepository, EfBusinessRepository>();
 
 builder.Services.AddScoped<IServiceRepository, EfServiceRepository>();
+
+builder.Services.AddScoped<IAuthorizationHandler, BusinessOwnerHandler>();
 
 builder.Services.AddScoped<ITokenService, JwtTokenService>();
 

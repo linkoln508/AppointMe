@@ -14,12 +14,15 @@ namespace AppointMe.Api.Controllers
     {
         private readonly IBusinessRepository _businesses;
         private readonly ICategoryRepository _categories;
+        private readonly IAuthorizationService _authorization;
 
-        public BusinessesController(IBusinessRepository businesses, ICategoryRepository categories)
+        public BusinessesController(IBusinessRepository businesses, ICategoryRepository categories, IAuthorizationService authorization)
         {
             _businesses = businesses;
             _categories = categories;
+            _authorization = authorization;
         }
+
 
         [AllowAnonymous]
         [HttpGet]
@@ -29,6 +32,7 @@ namespace AppointMe.Api.Controllers
             return Ok(businesses);
         }
 
+
         [AllowAnonymous]
         [HttpGet("{id:guid}")]
         public async Task<IActionResult> GetById(Guid id)
@@ -36,6 +40,7 @@ namespace AppointMe.Api.Controllers
             var business = await _businesses.GetByIdWithServicesAsync(id);
             return business == null ? NotFound() : Ok(business);
         }
+
 
         [Authorize(Roles = Roles.BusinessOwner)]
         [HttpPost]
@@ -56,10 +61,25 @@ namespace AppointMe.Api.Controllers
             return CreatedAtAction(nameof(GetById), new { id = newId }, created);
         }
 
-        [Authorize(Roles = Roles.BusinessOwner)]
+
+        [Authorize(Roles = Roles.BusinessOwnerOrAdmin)]
         [HttpPut("{id:guid}")]
         public async Task<IActionResult> Update(Guid id, Business business)
         {
+            var existingBusiness = await _businesses.GetByIdAsync(id);
+
+            if (existingBusiness == null)
+            {
+                return NotFound();
+            }
+
+            var result = await _authorization.AuthorizeAsync(User, existingBusiness, "BusinessOwnerOfResource");
+
+            if (!result.Succeeded)
+            {
+                return Forbid();
+            }
+
             if (await _categories.GetByIdAsync(business.CategoryId) == null)
             {
                 return BadRequest($"Category {business.CategoryId} does not exist.");
@@ -70,10 +90,25 @@ namespace AppointMe.Api.Controllers
             return updated ? NoContent() : NotFound();
         }
 
-        [Authorize(Roles = Roles.BusinessOwner)]
+
+        [Authorize(Roles = Roles.BusinessOwnerOrAdmin)]
         [HttpDelete("{id:guid}")]
         public async Task<IActionResult> Delete(Guid id)
         {
+            var business = await _businesses.GetByIdAsync(id);
+
+            if(business == null)
+            {
+                return NotFound();
+            }
+
+            var result = await _authorization.AuthorizeAsync(User, business, "BusinessOwnerOfResource");
+
+            if (!result.Succeeded)
+            {
+                return Forbid();
+            }
+
             var deleted = await _businesses.DeleteAsync(id);
             return deleted ? NoContent() : NotFound();
         }
