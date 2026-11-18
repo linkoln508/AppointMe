@@ -49,6 +49,13 @@ public class EfBusinessRepository : IBusinessRepository
         return await BusinessesWithCategoryName()
             .FirstOrDefaultAsync(b => b.Id == id);
     }
+    public async Task<IEnumerable<Business>> GetByOwnerAsync(Guid ownerId)
+    {
+        return await BusinessesWithCategoryName()
+            .Where(b => b.OwnerId == ownerId)
+            .OrderBy(b => b.Name)
+            .ToListAsync();
+    }
 
     // репозиторий бизнесов
     public async Task<Business?> GetByIdWithServicesAsync(Guid id)

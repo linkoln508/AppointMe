@@ -81,10 +81,27 @@ Note: a role change takes effect only after the user gets a new token (the role 
 | `GET /api/categories`, `GET /api/categories/{id}` | Anyone (anonymous) |
 | `POST/PUT/DELETE /api/categories` | `Admin` |
 | `GET /api/businesses`, `GET /api/businesses/{id}` | Anyone (anonymous) |
-| `POST/PUT/DELETE /api/businesses` | `BusinessOwner` (ownership check comes in W02-T06) |
 | `GET /api/businesses/{id}/services`, `GET .../services/{serviceId}` | Anyone (anonymous) |
-| `POST/PUT/DELETE /api/businesses/{id}/services` | `BusinessOwner` (ownership check comes in W02-T06) |
+| `POST /api/businesses` | `BusinessOwner` (owner is taken from the token) |
+| `PUT/DELETE /api/businesses/{id}` | Owner of this business, or `Admin` |
+| `POST/PUT/DELETE /api/businesses/{id}/services` | Owner of this business, or `Admin` |
+| `GET /api/me/businesses` | `BusinessOwner` (returns only own businesses) |
 
 No token → `401 Unauthorized`. Valid token but wrong role → `403 Forbidden`.
 Everything is protected by default (fallback policy); public endpoints are marked `[AllowAnonymous]`.
 `ownerId` of a new business is taken from the token, not from the request body.
+
+### Role-based vs resource-based authorization
+
+**Role-based** authorization answers "what kind of user are you?". `[Authorize(Roles = ...)]`
+checks the role from the token. It does not know which object the request is about.
+
+**Resource-based** authorization answers "is this specific object yours?". It needs the
+object itself, so the controller first loads the business from the database and then calls
+`IAuthorizationService.AuthorizeAsync(User, business, "BusinessOwnerOfResource")`.
+The handler (`BusinessOwnerHandler`) compares `OwnerId` of the business with the user id
+from the token. `Admin` passes for any business.
+
+Both are needed: the role attribute lets only owners and admins into the method,
+and the policy decides whether this particular business may be changed.
+Not found → `404`, found but not yours → `403`.

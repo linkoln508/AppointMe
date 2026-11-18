@@ -8,6 +8,8 @@ namespace AppointMe.Api.Data
 
         Task<Business?> GetByIdAsync(Guid id);
 
+        Task<IEnumerable<Business>> GetByOwnerAsync(Guid ownerId);
+
         Task<Guid> CreateAsync(Business business);
 
         Task<bool> UpdateAsync(Business business);
