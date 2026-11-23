@@ -105,3 +105,31 @@ from the token. `Admin` passes for any business.
 Both are needed: the role attribute lets only owners and admins into the method,
 and the policy decides whether this particular business may be changed.
 Not found → `404`, found but not yours → `403`.
+
+## Frontend
+
+A static site built with HTML, CSS and jQuery (Ajax). It lives in `src/web` and calls the API from the browser.
+
+### One-time setup
+```
+dotnet tool install --global dotnet-serve
+```
+
+### How to run
+
+1. Start Docker Desktop with the postgres container.
+2. Start the API (`AppointMe.Api`).
+3. From the repository root, start the site:
+```
+dotnet serve --directory src/web --port 5500
+```
+
+4. Open `http://localhost:5500`.
+
+### API address
+
+It is set in `src/web/js/config.js` (the `API_URL` constant). If the API runs on a different port, change it there.
+
+### CORS
+
+A browser does not let a page from one origin read responses from another origin, so the API explicitly allows requests from `http://localhost:5500` (the `Frontend` policy in `Program.cs`). The site must be opened on port 5500, otherwise the requests will be blocked.
