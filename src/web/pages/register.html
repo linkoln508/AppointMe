@@ -1,21 +1,39 @@
 ﻿<!DOCTYPE html>
-<html lang="ru">
+<html lang="uk">
 <head>
     <meta charset="UTF-8">
-    <title>Регистрация — AppointMe</title>
+    <title>Реєстрація — AppointMe</title>
     <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
     <header>
         <h1>AppointMe</h1>
         <nav>
-            <a href="../index.html">Главная</a>
-            <a href="login.html">Вход</a>
-            <a href="register.html">Регистрация</a>
+            <a href="../index.html">Головна</a>
+            <a href="login.html">Вхід</a>
+            <a href="register.html">Реєстрація</a>
         </nav>
     </header>
-    <main>
-        <h2>Регистрация</h2>
+        <main id="content">
+        <h2>Реєстрація</h2>
+        <form id="register-form" class="card">
+            <p><label>Ім'я<br><input type="text" id="fullName" required></label></p>
+            <p><label>Email<br><input type="email" id="email" required></label></p>
+            <p><label>Пароль (мінімум 8 символів + хоча б одна цифра)<br><input type="password" id="password" required></label></p>
+            <p><label>Повторіть пароль<br><input type="password" id="confirmPassword" required></label></p>
+            <p><label>Тип акаунта<br>
+                <select id="accountType">
+                    <option value="Customer">Клієнт</option>
+                    <option value="BusinessOwner">Власник бізнесу</option>
+                </select>
+            </label></p>
+            <p><button type="submit" class="button">Зареєструватися</button></p>
+            <p id="form-error" style="color: #c0392b;"></p>
+        </form>
     </main>
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+        <script src="../js/config.js"></script>
+        <script src="../js/api.js"></script>
+        <script src="../js/register.js"></script>
 </body>
 </html>
