@@ -16,7 +16,7 @@ builder.Services.AddControllers();
 
 builder.Services.AddOpenApi(options =>
 {
-    // принимаем Bearer-токен
+    // принимаем токен
     options.AddDocumentTransformer((document, context, cancellationToken) =>
     {
         document.Components ??= new OpenApiComponents();
@@ -107,6 +107,12 @@ builder.Services.AddScoped<IAuthorizationHandler, BusinessOwnerHandler>();
 
 builder.Services.AddScoped<ITokenService, JwtTokenService>();
 
+builder.Services.AddCors(options =>
+    options.AddPolicy("Frontend", policy =>
+        policy.WithOrigins("http://localhost:5500")
+              .AllowAnyHeader()
+              .AllowAnyMethod()));
+
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
@@ -124,11 +130,12 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseCors("Frontend");
+
 app.UseAuthentication();
 
 app.UseAuthorization();
 
 app.MapControllers();
-
 
 app.Run();

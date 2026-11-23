@@ -1,0 +1,22 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  background: #f5f6fa;
+  color: #222;
+}
+
+header {
+  background: #ec8f42;
+  color: white;
+  padding: 12px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+header h1 { margin: 0; font-size: 22px; -webkit-text-stroke: 1px black;}
+nav a { color: white; margin-left: 16px; text-decoration: none;
+    border: 2px solid white; padding: 6px 12px; border-radius: 6px;  }
+nav a:hover { text-decoration: underline; }
+
+main { padding: 24px; }
