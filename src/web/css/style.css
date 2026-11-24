@@ -61,3 +61,9 @@ main { padding: 24px; }
   border-radius: 6px;
   text-decoration: none;
 }
+
+.user-name {
+  color: white;
+  font-weight: bold;
+  margin-left: 12px;
+}

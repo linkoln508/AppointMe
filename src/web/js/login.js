@@ -10,7 +10,13 @@ $("#login-form").on("submit", function (event) {
       localStorage.setItem("token", response.accessToken);
       localStorage.setItem("expiresAt", response.expiresAt);
       localStorage.setItem("user", JSON.stringify(response.user));
-      window.location.href = "../index.html";
+      
+      const returnUrl = new URLSearchParams(window.location.search).get("returnUrl");
+      if (returnUrl && returnUrl.startsWith("/") && !returnUrl.startsWith("//")) {
+        window.location.href = returnUrl;
+      } else {
+        window.location.href = "../index.html";
+      }
     })
     .fail(function (xhr) {
       if (xhr.status === 401) {
