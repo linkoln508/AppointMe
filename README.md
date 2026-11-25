@@ -31,6 +31,7 @@ The old SQL scripts are still in `docs/legacy`, just for history.
    `dotnet user-secrets set "ConnectionStrings:Default" "Host=localhost;Port=5432;Database=appointme;Username=appointme;Password=YOUR_PASSWORD"`
 3. Run `dotnet run` in `src/AppointMe.Api`.
 4. Swagger is at `https://localhost:7057/swagger`.
+5. On a fresh clone run `dotnet restore` first, and trust the dev certificate once: `dotnet dev-certs https --trust`. From the command line start the API with `dotnet run --launch-profile https`, otherwise only http on port 5221 starts and the site can't reach the API.
 
 ## Passwords
 
@@ -61,6 +62,14 @@ dotnet user-secrets set "Seed:AdminPassword" "<your password>" --project src/App
 
 The role is saved inside the token. So if you change someone's role, they will see it only after they log in again.
 
+## Admin page
+
+The admin can see all users and all businesses (inactive too), block and unblock users and turn businesses off and on. API: `/api/admin/*`, only for `Admin`. On the site it's the admin page.
+
+An admin can't block themself (`400`). A blocked user can't log in (`403`).
+
+Known problem: if a user is blocked while logged in, their token still works until it expires (up to 60 minutes). Ways to fix it: shorter tokens, checking `IsBlocked` on every request (middleware or a policy), or refresh tokens. Not done yet.
+
 ### Who can do what
 
 | Endpoint | Who can call it |
@@ -76,6 +85,7 @@ The role is saved inside the token. So if you change someone's role, they will s
 | `PUT/DELETE /api/businesses/{id}` | The owner of this business or `Admin` |
 | `POST/PUT/DELETE /api/businesses/{id}/services` | The owner of this business or `Admin` |
 | `GET /api/me/businesses` | `BusinessOwner` (only their own businesses) |
+| `GET/POST /api/admin/...` | Only `Admin` |
 
 Without a token the API returns `401`. With a token but the wrong role it returns `403`.
 By default every endpoint needs a login (this is the fallback policy). Public ones have `[AllowAnonymous]`.

@@ -22,6 +22,7 @@ function loginUser(data) {
     contentType: "application/json",
     data: JSON.stringify(data)
   });
+}
 
 function getAdminUsers() {
   return $.getJSON(API_URL + "/api/admin/users");
@@ -45,5 +46,4 @@ function deactivateBusiness(id) {
 
 function activateBusiness(id) {
   return $.ajax({ url: API_URL + "/api/admin/businesses/" + id + "/activate", method: "POST" });
-}
 }
