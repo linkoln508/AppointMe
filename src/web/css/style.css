@@ -67,3 +67,22 @@ main { padding: 24px; }
   font-weight: bold;
   margin-left: 12px;
 }
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  margin-bottom: 24px;
+}
+
+.admin-table th,
+.admin-table td {
+  text-align: left;
+  padding: 8px 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+.admin-table button {
+  border: 0;
+  cursor: pointer;
+}
