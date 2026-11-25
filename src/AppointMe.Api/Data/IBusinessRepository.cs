@@ -1,4 +1,5 @@
 ﻿using AppointMe.Api.Models;
+using AppointMe.Api.Models.Admin;
 
 namespace AppointMe.Api.Data
 {
@@ -17,5 +18,9 @@ namespace AppointMe.Api.Data
         Task<bool> DeleteAsync(Guid id);
 
         Task<Business?> GetByIdWithServicesAsync(Guid id);
+
+        Task<List<AdminBusinessResponse>> GetAllForAdminAsync();
+
+        Task<bool> SetActiveAsync(Guid id, bool isActive);
     }
 }
