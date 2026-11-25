@@ -1,6 +1,7 @@
 ﻿using AppointMe.Api.Models;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
+using AppointMe.Api.Models.Admin;
 
 namespace AppointMe.Api.Data;
 
@@ -131,5 +132,39 @@ public class EfBusinessRepository : IBusinessRepository
         {
             throw pg;
         }
+    }
+
+        public async Task<List<AdminBusinessResponse>> GetAllForAdminAsync()
+    {
+        var query =
+            from b in _db.Businesses.AsNoTracking()
+            join c in _db.Categories on b.CategoryId equals c.Id
+            join u in _db.Users on b.OwnerId equals (Guid?)u.Id into owners
+            from owner in owners.DefaultIfEmpty()
+            orderby b.Name
+            select new AdminBusinessResponse
+            {
+                Id = b.Id,
+                Name = b.Name,
+                CategoryName = c.Name,
+                City = b.City,
+                IsActive = b.IsActive,
+                OwnerEmail = owner != null ? owner.Email : null
+            };
+
+        return await query.ToListAsync();
+    }
+
+    public async Task<bool> SetActiveAsync(Guid id, bool isActive)
+    {
+        var business = await _db.Businesses.FindAsync(id);
+        if (business == null)
+        {
+            return false;
+        }
+
+        business.IsActive = isActive;
+        await _db.SaveChangesAsync();
+        return true;
     }
 }
