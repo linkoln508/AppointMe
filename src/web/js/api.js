@@ -2,6 +2,10 @@ function getBusinesses() {
   return $.getJSON(API_URL + "/api/businesses");
 }
 
+function getCategories() {
+  return $.getJSON(API_URL + "/api/categories");
+}
+
 function getBusinessById(id) {
   return $.getJSON(API_URL + "/api/businesses/" + id);
 }
