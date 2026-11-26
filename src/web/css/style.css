@@ -55,7 +55,7 @@ main { padding: 24px; }
 }
 
 .button {
-  background: #e8873a;
+  background: #e1761e;
   color: white;
   padding: 8px 14px;
   border-radius: 6px;
@@ -85,4 +85,11 @@ main { padding: 24px; }
 .admin-table button {
   border: 0;
   cursor: pointer;
+}
+
+#categories {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 16px 24px 0;
 }
