@@ -31,4 +31,6 @@ public class AppointMeDbContext : IdentityDbContext<ApplicationUser, IdentityRol
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppointMeDbContext).Assembly);
     }
 
+    public DbSet<WorkingHours> WorkingHours => Set<WorkingHours>();
+
 }

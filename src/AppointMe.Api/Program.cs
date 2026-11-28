@@ -107,6 +107,8 @@ builder.Services.AddScoped<IAuthorizationHandler, BusinessOwnerHandler>();
 
 builder.Services.AddScoped<ITokenService, JwtTokenService>();
 
+builder.Services.AddScoped<IWorkingHoursRepository, EfWorkingHoursRepository>();
+
 builder.Services.AddCors(options =>
     options.AddPolicy("Frontend", policy =>
         policy.WithOrigins("http://localhost:5500")

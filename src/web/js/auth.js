@@ -42,7 +42,6 @@ $(document).ajaxError(function (event, xhr) {
     }
 });
 
-// Меню в шапке. В зависимости от того, кто вошёл
 function renderNav() {
   const nav = $("header nav");
 

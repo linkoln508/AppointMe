@@ -167,4 +167,9 @@ public class EfBusinessRepository : IBusinessRepository
         await _db.SaveChangesAsync();
         return true;
     }
+
+    Task<IEnumerable<Business>> IBusinessRepository.GetAllAsync()
+    {
+        throw new NotImplementedException();
+    }
 }

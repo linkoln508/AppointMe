@@ -340,6 +340,52 @@ namespace AppointMe.Api.Migrations
                         });
                 });
 
+            modelBuilder.Entity("AppointMe.Api.Models.WorkingHours", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id")
+                        .HasDefaultValueSql("gen_random_uuid()");
+
+                    b.Property<TimeOnly?>("BreakEnd")
+                        .HasColumnType("time without time zone")
+                        .HasColumnName("break_end");
+
+                    b.Property<TimeOnly?>("BreakStart")
+                        .HasColumnType("time without time zone")
+                        .HasColumnName("break_start");
+
+                    b.Property<Guid>("BusinessId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("business_id");
+
+                    b.Property<TimeOnly?>("CloseTime")
+                        .HasColumnType("time without time zone")
+                        .HasColumnName("close_time");
+
+                    b.Property<int>("DayOfWeek")
+                        .HasColumnType("integer")
+                        .HasColumnName("day_of_week");
+
+                    b.Property<bool>("IsClosed")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_closed");
+
+                    b.Property<TimeOnly?>("OpenTime")
+                        .HasColumnType("time without time zone")
+                        .HasColumnName("open_time");
+
+                    b.HasKey("Id")
+                        .HasName("pk_working_hours");
+
+                    b.HasIndex("BusinessId", "DayOfWeek")
+                        .IsUnique()
+                        .HasDatabaseName("ix_working_hours_business_id_day_of_week");
+
+                    b.ToTable("working_hours", (string)null);
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", b =>
                 {
                     b.Property<Guid>("Id")
@@ -549,6 +595,16 @@ namespace AppointMe.Api.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("fk_services_businesses_business_id");
+                });
+
+            modelBuilder.Entity("AppointMe.Api.Models.WorkingHours", b =>
+                {
+                    b.HasOne("AppointMe.Api.Models.Business", null)
+                        .WithMany()
+                        .HasForeignKey("BusinessId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_working_hours_businesses_business_id");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>

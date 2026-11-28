@@ -37,8 +37,6 @@ SELECT b.id AS "Id", b.category_id AS "CategoryId", c.name AS "CategoryName", b.
 
 ## 4. GET /api/businesses/{id}
 
-> Было 2 запроса — исправлено, см. раздел «Деталка бизнеса: Include или Select».
-
 Два запроса:
 
 ```sql
